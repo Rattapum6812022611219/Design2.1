@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Design Thinking Quiz</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background:#f4f6f8;
+  margin:20px;
+}
+.container {
+  max-width: 900px;
+  background: white;
+  padding: 20px;
+  margin: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #ccc;
+}
+h1 {
+  text-align: center;
+}
+.question {
+  margin-bottom: 15px;
+}
+.options label {
+  display: block;
+  margin-left: 20px;
+}
+.correct {
+  color: green;
+}
+.wrong {
+  color: red;
+}
+button {
+  background: #2c7be5;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button:hover {
+  background:#1a5ed8;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>แบบทดสอบ Design Thinking (ป.ตรี ปี 1)</h1>
+<form id="quizForm"></form>
+<br>
+<button onclick="checkAnswers()">ตรวจคำตอบ</button>
+<h2 id="result"></h2>
+</div>
+
+<script>
+const questions = [
+["Design Thinking คืออะไร","การออกแบบให้สวย","การใช้ประสบการณ์","การแก้ปัญหาโดยยึดมนุษย์เป็นศูนย์กลาง","การวางแผนธุรกิจ",2],
+["องค์กรควรตัดสินใจจากอะไร","ข้อมูลอดีต","ความต้องการลูกค้าในอนาคต","ความรู้สึกผู้บริหาร","โชค",1],
+["Mindset ส่งผลต่ออะไร","รายได้","พฤติกรรม","อายุ","IQ",1],
+["ข้อใดไม่ใช่องค์ประกอบ Mindset","ความคิด","ความรู้สึก","การกระทำ","เทคโนโลยี",3],
+["Design Thinking เหมาะกับปัญหาใด","ง่าย","ซับซ้อน","ตายตัว","ทางคณิต",1],
+["Empathy คืออะไร","วิเคราะห์","เข้าใจผู้อื่น","สร้างต้นแบบ","วางแผน",1],
+["ทีมหลากหลายช่วยอะไร","ช้า","มุมมองหลากหลาย","ขัดแย้ง","สับสน",1],
+["Learn from Failure คือ","เลี่ยงผิด","เรียนรู้จากความผิด","เลิกทำ","ไม่ลอง",1],
+["Iterate หมายถึง","ทำครั้งเดียว","ปรับปรุงซ้ำ","หยุด","ไม่แก้",1],
+["Human-centered คือ","เน้นเงิน","เน้นคน","เน้นเทคโนโลยี","เน้นองค์กร",1],
+];
+
+const form = document.getElementById("quizForm");
+
+questions.forEach((q,i)=>{
+  let html = `<div class="question"><b>${i+1}. ${q[0]}</b><div class="options">`;
+  for(let j=1;j<=4;j++){
+    html += `<label><input type="radio" name="q${i}" value="${j-1}"> ${["ก","ข","ค","ง"][j-1]}. ${q[j]}</label>`;
+  }
+  html += `</div><p id="ans${i}"></p></div>`;
+  form.innerHTML += html;
+});
+
+function checkAnswers(){
+  let score = 0;
+  questions.forEach((q,i)=>{
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    const answer = document.getElementById("ans"+i);
+    if(selected){
+      if(parseInt(selected.value)===q[5]){
+        score++;
+        answer.innerHTML = "<span class='correct'>✔ ถูก</span>";
+      } else {
+        answer.innerHTML = "<span class='wrong'>✘ ผิด | คำตอบที่ถูกคือ "+["ก","ข","ค","ง"][q[5]]+"</span>";
+      }
+    } else {
+      answer.innerHTML = "<span class='wrong'>ยังไม่ได้ตอบ</span>";
+    }
+  });
+  document.getElementById("result").innerText = "คะแนนของคุณ: "+score+"/"+questions.length;
+}
+</script>
+</body>
+</html>
