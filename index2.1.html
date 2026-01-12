@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Design Thinking Mindset Quiz</title>
+<style>
+body{
+  font-family: Tahoma, Arial;
+  background:#f0f2f5;
+  padding:20px;
+}
+.container{
+  max-width:900px;
+  background:white;
+  margin:auto;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 0 10px #ccc;
+}
+h1{text-align:center;}
+.question{margin-bottom:15px;}
+label{display:block;margin-left:20px;}
+.correct{color:green;}
+.wrong{color:red;}
+button{
+  padding:12px 20px;
+  background:#007bff;
+  border:none;
+  color:white;
+  border-radius:6px;
+  font-size:16px;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>แบบทดสอบ Design Thinking Mindset<br>ปริญญาตรี ปี 1</h1>
+<form id="quiz"></form>
+<br>
+<button onclick="check()">ตรวจคำตอบ</button>
+<h2 id="score"></h2>
+</div>
+
+<script>
+const q = [
+["Design Thinking คืออะไร","การออกแบบกราฟิก","การแก้ปัญหาโดยยึดมนุษย์เป็นศูนย์กลาง","การวางแผนธุรกิจ","การคิดเชิงตรรกะ",1],
+["หัวใจของ Design Thinking คือ","เทคโนโลยี","เงิน","มนุษย์","การตลาด",2],
+["Mindset หมายถึง","ความฉลาด","บุคลิกภาพ","ชุดความคิดและความเชื่อ","ความรู้",2],
+["Mindset มีองค์ประกอบกี่ส่วน","2","3","4","5",1],
+["Affective คือ","ความคิด","การกระทำ","ความรู้สึก","การวิเคราะห์",2],
+["Design Thinking เหมาะกับปัญหาแบบใด","ง่าย","ตายตัว","ซับซ้อน","คณิต",2],
+["Empathy คือ","การคิด","การเข้าใจผู้อื่น","การวิเคราะห์","การวางแผน",1],
+["ทีมหลากหลายช่วย","ลดคุณภาพ","เพิ่มมุมมอง","เพิ่มปัญหา","ลดประสิทธิภาพ",1],
+["Learn from Failure คือ","เลี่ยงผิด","ใช้ความผิดเป็นบทเรียน","เลิกทำ","ไม่ลอง",1],
+["Iterate คือ","ทำครั้งเดียว","ปรับปรุงซ้ำ","หยุด","ไม่แก้",1],
+["Prototype ใช้เพื่อ","โชว์","ทดสอบไอเดีย","ประหยัดเงิน","สวยงาม",1],
+["Human-centered คือ","เน้นเงิน","เน้นคน","เน้นเทคโนโลยี","เน้นองค์กร",1],
+["Design Thinking ต่างจาก Business เพราะ","ไม่ใช้เหตุผล","ยอมรับความผิดพลาด","ไม่ใช้ข้อมูล","ไม่สนใจผล",1],
+["Embrace ambiguity คือ","หลีกเลี่ยง","ยอมรับความไม่ชัดเจน","รีบตัดสิน","คิดแบบเดียว",1],
+["Optimism คือ","คิดลบ","คิดบวก","ไม่คิด","กลัวเสี่ยง",1],
+["การตั้งคำถามช่วย","เสียเวลา","เข้าใจปัญหา","ลดไอเดีย","เพิ่มปัญหา",1],
+["Design Thinking มองปัญหาเป็น","อุปสรรค","จุดเริ่มต้น","ความล้มเหลว","ภาระ",1],
+["การลงมือทำช่วย","เสียเวลา","เห็นปัญหาจริง","เพิ่มผิดพลาด","ลดไอเดีย",1],
+["เรียนรู้จากผู้ใช้เพราะ","เขารู้ดี","เขาเจอปัญหาจริง","เขาตัดสินแทน","เขาไม่เปลี่ยน",1],
+["Design Thinking เชื่อว่า","ไอเดียแรกดีที่สุด","ต้องสมบูรณ์","ความผิดพลาดคือบทเรียน","ไม่ต้องทดสอบ",2],
+["Collaborative คือ","ทำคนเดียว","ทำเป็นทีม","แข่งขัน","สั่งงาน",1],
+["ใช้สมองแบบใด","ซีกซ้าย","ซีกขวา","ทั้งสองซีก","ไม่ใช้",2],
+["ทดลองหลายแนวคิดช่วย","ลดทางเลือก","เพิ่มโอกาสได้คำตอบดี","สับสน","เสียเวลา",1],
+["เข้าใจผู้ใช้ช่วย","ลดต้นทุน","สร้างนวัตกรรม","ลดเวลา","ลดเสี่ยง",1],
+["เป้าหมาย Design Thinking คือ","กำไร","เทคโนโลยี","แก้ปัญหาให้คน","การตลาด",2]
+];
+
+const quiz = document.getElementById("quiz");
+
+q.forEach((x,i)=>{
+  let html = `<div class="question"><b>${i+1}. ${x[0]}</b>`;
+  for(let j=1;j<=4;j++){
+    html+=`<label><input type="radio" name="q${i}" value="${j-1}"> ${["ก","ข","ค","ง"][j-1]} ${x[j]}</label>`;
+  }
+  html+=`<p id="a${i}"></p></div>`;
+  quiz.innerHTML+=html;
+});
+
+function check(){
+  let score=0;
+  q.forEach((x,i)=>{
+    let sel=document.querySelector(`input[name="q${i}"]:checked`);
+    let p=document.getElementById("a"+i);
+    if(sel){
+      if(parseInt(sel.value)===x[5]){
+        score++;
+        p.innerHTML="<span class='correct'>✔ ถูก</span>";
+      }else{
+        p.innerHTML="<span class='wrong'>✘ ผิด | เฉลย: "+["ก","ข","ค","ง"][x[5]]+"</span>";
+      }
+    }else{
+      p.innerHTML="<span class='wrong'>ยังไม่ได้ตอบ</span>";
+    }
+  });
+  document.getElementById("score").innerText="คะแนน: "+score+"/25";
+}
+</script>
+</body>
+</html>
